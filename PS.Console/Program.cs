@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using PS.Data;
+using PS.Data.Infrastructures;
 using PS.Domain;
-
+using PS.Service.TP2;
 
 namespace PS.ConsoleApp
 {
@@ -75,15 +78,20 @@ namespace PS.ConsoleApp
             {
                 System.Console.WriteLine("DATABASE CREATED!");
 
+                Category C = new Category()
+                {
+                    Name = "Category 1"
+                };
+
 
                 //CREATION DU NOUVEAU PRODUIT
                 Product p = new Product()
                 {
                     Name = "Product 1",
                     DateProd = DateTime.Now,
-                    Description = "Description Product 1" +
-                    "description1.2",
-                    Price = 999
+                    Description = "Description Product 1",
+                    Price = 9999,
+                    MyCategory = C
                 };
 
                 //AJOUTER LE PRODUIT
@@ -92,11 +100,31 @@ namespace PS.ConsoleApp
                 //ENREGISTER LES MODIFICATIONS (DANS LA BASE DE DONNEES)
                 context.SaveChanges();
 
+                System.Console.WriteLine("last  ");
+                var prod = context.Products.OrderBy(p => p.ProductId).Last();
+                System.Console.WriteLine(prod.ProductId + " " + prod.Name + " " + prod.MyCategory.Name);
             }
+            ////setup our DI
+            //var serviceProvider = new ServiceCollection()
+            //.AddScoped<ICategoryService, CategoryService>()
+            //.BuildServiceProvider();
+
+            //setup our DI
+            var serviceProvider = new ServiceCollection()
+            .AddScoped<ICategoryService, CategoryService>()
+            .AddTransient<IUnitOfWork, UnitOfWork>()
+            .AddSingleton<IDataBaseFactory, DataBaseFactory>()
+            .BuildServiceProvider();
+
+            //do the actual work here
+            var serviceCategory = serviceProvider.GetService<ICategoryService>();
+            serviceCategory.Add(new Category() { Name = "Cat1" });
+            serviceCategory.Commit();
+
 
         }
 
-        
+
 
 
     }

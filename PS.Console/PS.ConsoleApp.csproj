@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PS.Data\PS.Data.csproj" />
     <ProjectReference Include="..\PS.Domain\PS.Domain.csproj" />
+    <ProjectReference Include="..\PS.ServicePattern\PS.ServicePattern.csproj" />
     <ProjectReference Include="..\PS.Service\PS.Service.csproj" />
   </ItemGroup>
 

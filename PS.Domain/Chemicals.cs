@@ -10,7 +10,7 @@ namespace PS.Domain
         
         public string LabName { get; set; }
 
-        public Address MyAddress { get; set; }
+        public virtual Address MyAddress { get; set; }
 
         // public string StreetAdress { get; set; }
 
